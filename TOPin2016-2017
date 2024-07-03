@@ -1,0 +1,27 @@
+SELECT t2016.product_name
+FROM (
+    SELECT 
+        products.product_name,
+        SUM(order_details.quantity) AS Total_Quantity,
+        YEAR(orders.order_date) AS OrderYear
+    FROM orders
+    INNER JOIN order_details ON order_details.order_id = orders.order_id 
+    INNER JOIN products ON order_details.product_id = products.product_id 
+    WHERE OrderYear = 2016
+    GROUP BY products.product_id, OrderYear 
+    ORDER BY Total_Quantity DESC 
+    LIMIT 5
+) AS t2016
+INNER JOIN (
+    SELECT 
+        products.product_name,
+        SUM(order_details.quantity) AS Total_Quantity,
+        YEAR(orders.order_date) AS OrderYear
+    FROM orders
+    INNER JOIN order_details ON order_details.order_id = orders.order_id 
+    INNER JOIN products ON order_details.product_id = products.product_id 
+    WHERE OrderYear = 2017
+    GROUP BY products.product_id, OrderYear 
+    ORDER BY Total_Quantity DESC 
+    LIMIT 5
+) AS t2017 ON t2016.product_name = t2017.product_name;

@@ -1,0 +1,9 @@
+SELECT    
+          YEAR(orders.order_date) AS OrderYear,
+          SUM(products.unit_price * order_details.quantity * (1 - order_details.discount)) AS TotalSales
+FROM orders 
+INNER JOIN order_details ON orders.order_id = order_details.order_id
+INNER join products ON products.product_id = order_details.product_id
+WHERE orders.ship_region = 'Western Europe'
+GROUP BY OrderYear
+ORDER BY OrderYear;
